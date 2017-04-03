@@ -1,4 +1,4 @@
-############################################################################
+###############################################################################
 import os
 import sys
 
@@ -8,10 +8,10 @@ from sqlalchemy.orm import relationship #to create foreign key
 from sqlalchemy import create_engine #to use in config code in end
 
 Base = declarative_base() #to let sqlalchemy know our classes are special sqlalchemy classes that correspond to tables in database
-############################################################################################
+###############################################################################
 
 
-###################################################################################
+###############################################################################
 class Restaurant(Base):
 	__tablename__ = 'restaurant'
 
@@ -28,9 +28,22 @@ class MenuItem(Base):
 	price = Column(String(8))
 	restaurant_id = Column(Integer, ForeignKey('restaurant.ids'))#retrieve id number from restaurant table
 	restaurant = relationship(Restaurant)
-###########################################################################################
+###############################################################################
 
-##########################################################################################
+	@property
+	def serialize(self):
+		#returns data in serializeble format
+		return{
+		'name':self.name,
+		'description':self.description,
+		'id':self.ids,
+		'price':self.price,
+		'course':self.course,
+		}
+
+###############################################################################
+
+###############################################################################
 engine = create_engine('sqlite:///restaurantmenu.db')
 
 Base.metadata.create_all(engine)# goes to database and add classes as tables in our databases.
